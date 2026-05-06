@@ -143,7 +143,7 @@ xvfb-run -a drawio --version
 
 ```bash
 # Plugin marketplace (recommended)
-# In Claude Code: /plugin marketplace add Agents365-ai/drawio-skill
+# In Claude Code: /plugin marketplace add Agents365-ai/365-skills
 # Then: /plugin install drawio
 
 # Manual global install
