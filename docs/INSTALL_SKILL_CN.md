@@ -17,7 +17,7 @@ npx skills add Agents365-ai/365-skills -g
 git clone https://github.com/Agents365-ai/drawio-skill.git ~/.claude/skills/drawio-skill
 ```
 
-常用路径：`~/.claude/skills/`（Claude Code）、`~/.config/opencode/skills/`（Opencode）、`~/.openclaw/skills/`（OpenClaw）、`~/.agents/skills/`（Codex）。同时已索引于 [SkillsMP](https://skillsmp.com) 和 [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill)。
+常用路径：`~/.claude/skills/`（Claude Code）、`~/.config/opencode/skills/`（Opencode）、`~/.openclaw/skills/`（OpenClaw）、`~/.agents/skills/`（Codex）。同时已索引于 [SkillsMP](https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md) 和 [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill)。
 
 ## 更新
 

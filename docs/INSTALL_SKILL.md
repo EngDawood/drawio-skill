@@ -17,7 +17,7 @@ Manual install — clone into your agent's skills directory:
 git clone https://github.com/Agents365-ai/drawio-skill.git ~/.claude/skills/drawio-skill
 ```
 
-Common paths: `~/.claude/skills/` (Claude Code), `~/.config/opencode/skills/` (Opencode), `~/.openclaw/skills/` (OpenClaw), `~/.agents/skills/` (Codex). Also indexed on [SkillsMP](https://skillsmp.com) and [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill).
+Common paths: `~/.claude/skills/` (Claude Code), `~/.config/opencode/skills/` (Opencode), `~/.openclaw/skills/` (OpenClaw), `~/.agents/skills/` (Codex). Also indexed on [SkillsMP](https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md) and [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill).
 
 ## Updates
 

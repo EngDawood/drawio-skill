@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
 [![GitHub stars](https://img.shields.io/github/stars/Agents365-ai/drawio-skill?style=flat&logo=github)](https://github.com/Agents365-ai/drawio-skill/stargazers)
-[![SkillsMP](https://img.shields.io/badge/SkillsMP-listed-1f6feb)](https://skillsmp.com)
+[![SkillsMP](https://img.shields.io/badge/SkillsMP-listed-1f6feb)](https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md)
 [![Claude Code Plugin](https://img.shields.io/badge/Claude%20Code-plugin-8a2be2)](https://github.com/Agents365-ai/365-skills)
 [![Agent Skills](https://img.shields.io/badge/Agent%20Skills-兼容-2ea44f)](https://agentskills.io)
 
@@ -88,7 +88,7 @@ git clone https://github.com/Agents365-ai/drawio-skill.git \
   ~/.claude/skills/drawio-skill
 ```
 
-同时索引于 [SkillsMP](https://skillsmp.com) 与 [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill)。
+同时索引于 [SkillsMP](https://skillsmp.com/skills/agents365-ai-drawio-skill-skills-drawio-skill-skill-md) 与 [ClawHub](https://clawhub.ai/agents365-ai/drawio-pro-skill)。
 
 **更新：** `/plugin update drawio`（Claude Code）、`skills update drawio-skill`（SkillsMP）、`clawhub update drawio-pro-skill`（OpenClaw），或 `git pull`（手动安装）—— 详见 [docs/INSTALL_SKILL_CN.md#更新](docs/INSTALL_SKILL_CN.md#更新)。
 
