@@ -1,0 +1,9 @@
+{
+  "name": "drawio-skill",
+  "version": "1.0.0",
+  "description": "From text to professional diagrams. Generate draw.io files from natural language — or turn an existing codebase into a structure diagram — with self-check, iterative refinement, 10,000+ official shapes, and AI/LLM brand logos.",
+  "author": {
+    "name": "Dawood"
+  },
+  "keywords": ["drawio", "diagram", "use-case", "er-diagram"]
+}
