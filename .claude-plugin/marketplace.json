@@ -8,7 +8,8 @@
     {
       "name": "drawio-skill",
       "source": "./",
-      "description": "From text to professional diagrams. Generate draw.io files from natural language — or turn an existing codebase into a structure diagram — with self-check, iterative refinement, 10,000+ official shapes, and AI/LLM brand logos."      "category": "automation"
+      "description": "From text to professional diagrams. Generate draw.io files from natural language — or turn an existing codebase into a structure diagram — with self-check, iterative refinement, 10,000+ official shapes, and AI/LLM brand logos."   ,
+        "category": "automation"
     }
   ]
 }
