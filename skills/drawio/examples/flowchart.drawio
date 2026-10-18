@@ -1,0 +1,75 @@
+<mxGraphModel>
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    
+    <!-- Start -->
+    <mxCell id="start" value="Start" style="ellipse;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="140" y="40" width="80" height="80" as="geometry"/>
+    </mxCell>
+    
+    <!-- Get Input -->
+    <mxCell id="proc1" value="Get User Input" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="120" y="160" width="120" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- Validate Decision -->
+    <mxCell id="dec1" value="Valid Input?" style="rhombus;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+      <mxGeometry x="130" y="260" width="100" height="80" as="geometry"/>
+    </mxCell>
+    
+    <!-- Process Data -->
+    <mxCell id="proc2" value="Process Data" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+      <mxGeometry x="120" y="380" width="120" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- Show Error -->
+    <mxCell id="error" value="Show Error" style="rounded=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="300" y="270" width="120" height="60" as="geometry"/>
+    </mxCell>
+    
+    <!-- End -->
+    <mxCell id="end" value="End" style="ellipse;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+      <mxGeometry x="140" y="480" width="80" height="80" as="geometry"/>
+    </mxCell>
+    
+    <!-- Edges -->
+    <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="start" target="proc1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="proc1" target="dec1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="e3" value="Yes" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="dec1" target="proc2">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="e4" value="No" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="dec1" target="error">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="proc2" target="end">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    
+    <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" edge="1" parent="1" source="error" target="end">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="360" y="520"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Loop back from error to input -->
+    <mxCell id="e7" value="Retry" style="edgeStyle=orthogonalEdgeStyle;exitX=0;exitY=0.5;entryX=1;entryY=0.5;dashed=1;" edge="1" parent="1" source="error" target="proc1">
+      <mxGeometry relative="1" as="geometry">
+        <Array as="points">
+          <mxPoint x="280" y="300"/>
+          <mxPoint x="280" y="190"/>
+        </Array>
+      </mxGeometry>
+    </mxCell>
+  </root>
+</mxGraphModel>
