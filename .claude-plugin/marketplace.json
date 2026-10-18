@@ -1,0 +1,16 @@
+{
+  "name": "drawio-skill",
+  "owner": {
+    "name": "EngDawood"
+  },
+  "plugins": [
+    {
+      "name": "drawio-skill",
+      "source": "./",
+      "description": "Generate draw.io diagrams (flowcharts, architecture, ER, UML, network) as mxGraphModel XML, with the draw.io MCP server for inline rendering."
+    }
+  ],
+  "metadata": {
+    "description": "Claude Code plugin for generating draw.io diagrams."
+  }
+}
