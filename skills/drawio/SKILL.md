@@ -1,144 +1,110 @@
 ---
 name: drawio
-description: Generate draw.io diagrams as .xml files for flowcharts, architecture diagrams, ER diagrams, UML, network diagrams, and more. Use whenever the user mentions diagrams, flowcharts, visual representations, system architecture, database schemas, or asks to visualize any process or structure. Works in claude.ai for free users without external dependencies.
+description: This skill should be used when the user asks to "draw a diagram", "make a flowchart", "design a system architecture", "create an ER diagram or database schema", "draw UML, network, BPMN, org chart or mind map", or otherwise visualize a process or structure. Produces draw.io mxGraphModel XML as a .xml file or through the draw.io MCP create_diagram tool.
+version: 1.1.0
 ---
 
 # Draw.io Diagram Generator
 
-Generate professional draw.io diagrams as `.xml` files (mxGraphModel format) that can be opened in [draw.io](https://app.diagrams.net) or the draw.io desktop app. Using `.xml` extension ensures users can copy and inspect the file content directly in Claude's UI.
+Write draw.io diagrams as `mxGraphModel` XML that opens in [draw.io](https://app.diagrams.net) or the desktop app.
 
-## Quick Start
+## Which tool to use
 
-When the user requests a diagram:
+- **`create_diagram` available** (draw.io MCP server, in a chat that shows diagrams inline such as claude.ai): call it. The diagram appears in the conversation; write a file only when the user asks for one. Call `get_drawio_reference` once per format before the first diagram, and `search_shapes` first for AWS, Azure, GCP, Cisco, Kubernetes or brand icons.
+- **Otherwise** (Claude Code, no MCP, or the user wants a file): follow Steps.
 
-1. **Generate mxGraphModel XML** for the requested diagram type
-2. **Write to `/mnt/user-data/outputs/`** using `create_file` tool with `.xml` extension
-3. **Share with user** using `present_files` tool
+## Steps
 
-## Supported Diagram Types
+1. Pick the nearest file in `examples/` for the requested diagram type and mirror its structure.
+2. Consult the references below for the branches the diagram needs.
+3. Choose positions: place nodes yourself on the grid, or hand layout to the tool (see Auto-layout).
+4. Write the XML to `/mnt/user-data/outputs/<descriptive-lowercase-name>.xml` with `create_file`. The `.xml` extension keeps the content copyable in Claude's UI (the `.drawio` type is not).
+5. Run the repair pass, then check the file against the Critical Rules and `references/mxfile.xsd`; done when every rule holds and the XML is well-formed.
+6. Deliver per Output formats.
 
-- **Flowcharts** - Process flows, decision trees, workflows
-- **System Architecture** - Microservices, cloud infrastructure, component diagrams
-- **ER Diagrams** - Database schemas, entity relationships
-- **UML** - Class diagrams, sequence diagrams, state machines
-- **Network Diagrams** - Network topology, infrastructure
-- **Org Charts** - Team structures, hierarchies
-- **BPMN** - Business process modeling
-- **Mind Maps** - Concept mapping, brainstorming
-- **Activity Diagrams** - UML activity flows with start/end states, actions, decisions, and parallel branches
+Diagram types covered: flowcharts, system architecture, ER, UML (class, sequence, state, activity), network, org charts, BPMN, mind maps.
 
-## Format Selection
-
-For claude.ai users, we generate XML directly (no server-side conversion needed):
-
-- **XML (our approach)**: Direct file generation, works offline, full control
-- ~~Mermaid/CSV~~: Requires server conversion (not available for free users)
-
-## File Naming
-
-- Descriptive, lowercase with hyphens: `user-login-flow.xml`
-- Always use `.xml` extension (NOT `.drawio` — the DRAWIO type in Claude's UI cannot be copied)
-- Save to `/mnt/user-data/outputs/`
-
-## XML Structure
-
-### Basic Template
-
-Every diagram follows this structure:
+## Skeleton
 
 ```xml
-<mxGraphModel>
+<mxGraphModel adaptiveColors="auto">
   <root>
     <mxCell id="0"/>
     <mxCell id="1" parent="0"/>
-    <!-- Your diagram elements here with parent="1" -->
   </root>
 </mxGraphModel>
 ```
 
-## Reference
+Diagram cells go inside `<root>` with `parent="1"`.
 
-See `references/style-reference.md` : A comprehensive guide covering the complete .drawio file structure, all style properties, shape types, edge routing, color palettes, HTML labels, layers, groups, and complete examples. This is the primary document an AI system needs to generate valid draw.io files.
-See `references/mxfile.xsd` — An XML Schema Definition (XSD) for validating the structure of .drawio files. Use this to validate AI-generated output before saving or delivering it to users.
-See `references/mermaid-reference.md` : Short hints for generating Mermaid diagrams that render correctly in draw.io. draw.io's Mermaid parser covers 26 diagram types — the header keyword on the first non-directive line selects the type.
-See `references/xml-reference.md`: Detailed reference for styles, edge routing, containers, layers, tags, metadata, and dark mode. Consult this when generating draw.io XML diagrams.
+## Auto-layout
 
-### Shape Library
+Use it when the graph has more than about 30 shapes or coordinates are impractical to compute; only the nodes and edges (the topology) need to be right.
 
-See `references/shapes.md` for complete shape reference.
-
-Common shapes:
-- **Rectangle**: `style="rounded=1;whiteSpace=wrap;"`
-- **Diamond**: `style="rhombus;whiteSpace=wrap;"`
-- **Circle**: `style="ellipse;whiteSpace=wrap;"`
-- **Cylinder**: `style="shape=cylinder3;whiteSpace=wrap;"`
-
-### Edge Routing
-
-**CRITICAL**: Every edge MUST have a geometry child element:
-
-```xml
-<mxCell id="e1" edge="1" parent="1" source="a" target="b" style="edgeStyle=orthogonalEdgeStyle;">
-  <mxGeometry relative="1" as="geometry"/>
-</mxCell>
-```
-
-Key practices:
-- Space nodes 200px horizontal / 120px vertical minimum
-- Use `edgeStyle=orthogonalEdgeStyle` for right angles
-- Control connection points with `exitX/exitY/entryX/entryY` (0-1 values)
-- Add waypoints for complex routing (see `references/edge-routing.md`)
-
-### Styling
-
-See `references/styles.md` for complete style reference.
-
-Quick reference:
-- Colors: `fillColor=#dae8fc;strokeColor=#6c8ebf`
-- Fonts: `fontSize=12;fontColor=#333333`
-- Borders: `strokeWidth=2;dashed=1`
-
-## Containers
-
-For nested elements (architecture diagrams, groupings):
-
-**Swimlane** (visible container):
-```xml
-<mxCell id="svc1" value="User Service" style="swimlane;startSize=30;fillColor=#dae8fc;" vertex="1" parent="1">
-  <mxGeometry x="100" y="100" width="300" height="200" as="geometry"/>
-</mxCell>
-<mxCell id="api1" value="API" style="rounded=1;" vertex="1" parent="svc1">
-  <mxGeometry x="20" y="40" width="120" height="60" as="geometry"/>
-</mxCell>
-```
-
-**Group** (invisible container):
-```xml
-<mxCell id="grp1" style="group;" vertex="1" parent="1">
-  <mxGeometry x="100" y="100" width="300" height="200" as="geometry"/>
-</mxCell>
-```
-
-## Examples
-
-See the `examples/` directory for complete working diagrams:
-- `examples/flowchart.xml` - Simple decision flow
-- `examples/architecture.xml` - Microservices architecture
-- `examples/er-diagram.xml` - Database schema
-- `examples/activity-diagram.xml` - Activity diagram (admin dashboard login flow with start/end states, actions, decisions, fork/join, and parallel branches)
-
-## Resources
-
-- **References**: Detailed guides in `references/` directory
-- **Shapes**: `references/shapes.md` - All available shapes
-- **Styles**: `references/styles.md` - Complete styling options
-- **Edge Routing**: `references/edge-routing.md` - Advanced routing techniques
-- **Official Docs**: https://www.drawio.com/doc/faq/drawio-style-reference.html
+- **`postLayout: "elk"`** on `create_diagram`: re-lays-out every vertex as a layered flow. Set `direction` to `vertical` (default) or `horizontal`. Suits pipelines and flowcharts.
+- **`routing: "libavoid"`** on `create_diagram`: keeps hand-placed coordinates and re-routes right-angle edges around shapes. Suits hand-placed architecture, swimlane, UML and floor-plan diagrams whose edges cross shapes.
+- Pick one of the two. Leave both off for swimlanes, containers, grouped regions and any placement that carries meaning.
+- Without the tool, place nodes yourself on the grid. Omit hand-written waypoints when `routing` is set.
 
 ## Critical Rules
 
-1. **No double hyphens in XML comments**: `--` breaks XML parsing
-2. **Unique IDs**: Each `mxCell` needs unique `id` attribute
-3. **Edge geometry**: Always include `<mxGeometry relative="1" as="geometry"/>`
-4. **Escape special chars**: Use `&amp;`, `&lt;`, `&gt;`, `&quot;` in attributes
-5. **Grid alignment**: Position nodes on 10px grid for clean layouts
+1. Emit the XML with no comments: they add nothing and `--` inside one breaks parsing.
+2. Give every `mxCell` a unique `id`.
+3. Give every edge a geometry child: `<mxGeometry relative="1" as="geometry"/>`.
+4. Escape `&amp;`, `&lt;`, `&gt;`, `&quot;` in attributes (including `R&amp;D` and HTML labels).
+5. Parent the default layer to the root: `<mxCell id="1" parent="0"/>`.
+6. Give cells inside a container `parent="<container_id>"` with coordinates relative to it. Parent each edge to the innermost container holding both endpoints, or `parent="1"` when an end sits outside every container.
+7. Snap positions to a 10px grid; space nodes at least 200px horizontally and 120px vertically.
+8. Route edges with `edgeStyle=orthogonalEdgeStyle`.
+9. Write only the XML to the file, with no code fence or prose around it.
+
+## Repair pass
+
+Run right after writing the file, before delivery. It fixes the slips that make draw.io reject a diagram: text around the XML, a raw `<` or stray `&` in an attribute, and the default layer parented to itself.
+
+```bash
+python3 scripts/repair_xml.py /mnt/user-data/outputs/<name>.xml
+```
+
+## Output formats
+
+- **Default**: the `.xml` file from Steps; the user opens it in draw.io.
+- **Browser URL**: when the user asks for a link, print the output of the script with the local file path:
+
+  ```bash
+  python3 scripts/drawio_url.py /mnt/user-data/outputs/<name>.xml
+  ```
+
+  The script uses the `#R` form: a `#create=` hash makes draw.io warn "All changes will be lost!". Past the browser's URL length limit, deliver the file instead.
+- **PNG, SVG, PDF**: tell the user to open the file in draw.io and use File, Export As.
+
+## References
+
+Open the one that matches the branch:
+
+- `references/style-reference.md`: the primary guide. File structure, all style properties, shape types, edge routing, palettes, HTML labels, layers, groups. Read first for any diagram.
+- `references/xml-reference.md`: containers, layers, tags, metadata, dark mode.
+- `references/shapes.md`: picking a shape for a concept.
+- `references/styles.md`: color palettes, fonts, borders.
+- `references/edge-routing.md`: waypoints, `exitX/exitY/entryX/entryY` connection points, tangled edges.
+- `references/mermaid-reference.md`: only when the user asks for Mermaid.
+- `references/mxfile.xsd`: schema for validating output.
+- `scripts/repair_xml.py`, `scripts/drawio_url.py`: the repair pass and URL builder above.
+
+The upstream drawio-mcp project keeps the current versions of the shared docs. Fetch them when network access exists and a local copy looks stale:
+
+- XML basics (skeleton, vertex and edge templates, labels, grid, containers, swimlanes): https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/xml-essentials.md
+- Full XML reference (layers, tags, metadata, tables, dark mode): https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/xml-reference.md
+- Mermaid syntax for every supported type: https://raw.githubusercontent.com/jgraph/drawio-mcp/main/shared/mermaid-reference.md
+
+## Examples
+
+In `examples/`:
+
+- `flowchart.drawio`: decision flow with loops.
+- `architecture.drawio`: microservices with swimlane containers.
+- `er-diagram.drawio`: blog database schema.
+- `ER-Diagram-chen.xml`: Chen-notation ER.
+- `activity-diagram.xml`: start/end states, actions, decisions, fork/join, parallel branches.
+- `DFD-Context-0.xml`: level-0 data flow diagram.
+- `Basic-use-case.drawio.xml`: UML use case.

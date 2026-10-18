@@ -5,7 +5,7 @@ Generate professional draw.io diagrams directly in claude.ai. Creates native `.d
 ## Features
 
 ✅ **No setup required** - Works immediately in claude.ai  
-✅ **Free tier compatible** - No external services or API keys needed  
+✅ **Free tier compatible** - Works with no external services or API keys; uses the draw.io MCP server when available  
 ✅ **Native .drawio files** - Full compatibility with draw.io ecosystem  
 ✅ **Rich shape library** - Flowcharts, UML, architecture, networks, and more  
 ✅ **Professional styling** - Color schemes, fonts, and layout guidelines  
@@ -44,17 +44,25 @@ Generate professional draw.io diagrams directly in claude.ai. Creates native `.d
 ## What's Included
 
 ```
-drawio-skill/
+drawio/
 ├── SKILL.md              # Main skill file
 ├── README.md             # This file
 ├── examples/             # Working diagram examples
 │   ├── flowchart.drawio
 │   ├── architecture.drawio
-│   └── er-diagram.drawio
+│   ├── er-diagram.drawio
+│   ├── ER-Diagram-chen.xml
+│   ├── activity-diagram.xml
+│   ├── DFD-Context-0.xml
+│   └── Basic-use-case.drawio.xml
 └── references/           # Detailed documentation
-    ├── shapes.md         # Complete shape library
-    ├── styles.md         # Styling guide
-    └── edge-routing.md   # Advanced connection techniques
+    ├── style-reference.md   # Primary guide for valid files
+    ├── xml-reference.md     # Containers, layers, tags, dark mode
+    ├── shapes.md            # Shape library
+    ├── styles.md            # Styling guide
+    ├── edge-routing.md      # Advanced connection techniques
+    ├── mermaid-reference.md # Mermaid hints
+    └── mxfile.xsd           # Schema for validating output
 ```
 
 ## Usage Examples
@@ -83,32 +91,16 @@ Design a database schema for a blog with:
 Show relationships with cardinality
 ```
 
-## Comparison with Official draw.io-mcp
+## Relationship to the official draw.io MCP
 
-This skill is based on the official [draw.io-mcp](https://github.com/jgraph/drawio-mcp) project but simplified for claude.ai users.
+This skill is based on the official [draw.io-mcp](https://github.com/jgraph/drawio-mcp) project. The repo's `.mcp.json` registers the remote server at `https://mcp.draw.io/mcp`.
 
-| Feature | This Skill | Official MCP |
-|---------|-----------|--------------|
-| Setup | None | MCP server required |
-| claude.ai free tier | ✅ Yes | ❌ No |
-| Inline rendering | ❌ No | ✅ Yes |
-| File output | `.drawio` | `.drawio` + exports |
-| Mermaid/CSV | ❌ No | ✅ Yes |
-| PNG/SVG/PDF export | Manual | Automatic |
+| Situation | What the skill does |
+|-----------|---------------------|
+| `create_diagram` tool available in a chat that shows diagrams inline (claude.ai) | Calls it; the diagram appears in the conversation |
+| No MCP server, Claude Code, or a file is wanted | Writes `.xml` to `/mnt/user-data/outputs/`, repairs and validates it, optionally builds a browser URL |
 
-### When to use which?
-
-**Use this skill if:**
-- You're on claude.ai free tier
-- You want zero setup
-- You're okay opening files in draw.io
-- You prefer XML generation (full control)
-
-**Use official MCP if:**
-- You have claude.ai Pro/Team
-- You want inline diagram rendering
-- You need automatic PNG/SVG export
-- You prefer Mermaid syntax
+For large or flow-style diagrams the MCP tool can auto-position nodes (`postLayout: "elk"`) or re-route edges (`routing: "libavoid"`). Without it, place nodes on a 10px grid.
 
 ## Opening Your Diagrams
 
@@ -128,6 +120,7 @@ The `.drawio` files are XML - you can edit them directly if needed!
 ## Learning Resources
 
 ### Included Documentation
+- `references/style-reference.md` - Primary guide: structure, styles, shapes, edges, palettes
 - `references/shapes.md` - Every shape type with examples
 - `references/styles.md` - Color palettes, fonts, styling
 - `references/edge-routing.md` - Connection techniques
@@ -136,6 +129,8 @@ The `.drawio` files are XML - you can edit them directly if needed!
 - `examples/flowchart.drawio` - Decision flow with loops
 - `examples/architecture.drawio` - Microservices setup
 - `examples/er-diagram.drawio` - Blog database schema
+- `examples/activity-diagram.xml` - Activity diagram with fork/join
+- `examples/ER-Diagram-chen.xml`, `DFD-Context-0.xml`, `Basic-use-case.drawio.xml` - Chen ER, data flow, use case
 
 ### Official draw.io Resources
 - [Style Reference](https://www.drawio.com/doc/faq/drawio-style-reference.html)
@@ -145,11 +140,10 @@ The `.drawio` files are XML - you can edit them directly if needed!
 ## How It Works
 
 1. **You request a diagram** → Claude analyzes the requirements
-2. **Claude generates XML** → Using mxGraphModel format
-3. **File saved** → Written to `/mnt/user-data/outputs/`
-4. **Download & open** → Works in draw.io immediately
-
-No server calls, no API keys, no conversion steps. Pure XML generation.
+2. **Claude picks a route** → the MCP `create_diagram` tool if available, otherwise XML written to a file
+3. **Repair and validate** → a short Python repair pass, then the Critical Rules and `references/mxfile.xsd`
+4. **Deliver** → `.xml` in `/mnt/user-data/outputs/`, or a browser URL on request
+5. **Export** → open in draw.io and use File → Export As for PNG, SVG or PDF
 
 ## Advanced Tips
 
@@ -207,6 +201,10 @@ MIT License - Based on draw.io-mcp by JGraph
 Not affiliated with JGraph or draw.io
 
 ## Version
+
+**v1.1.0**
+- MCP-aware tool choice, auto-layout options, repair pass, browser URL output
+- Stricter XML rules (no comments, container and edge parenting)
 
 **v1.0.0** - Initial release
 - Complete mxGraphModel XML generation

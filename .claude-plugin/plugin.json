@@ -1,0 +1,12 @@
+{
+  "name": "drawio-skill",
+  "version": "1.1.0",
+  "description": "Generate draw.io diagrams (flowcharts, architecture, ER, UML, network) as mxGraphModel XML, with the draw.io MCP server for inline rendering.",
+  "author": {
+    "name": "EngDawood"
+  },
+  "homepage": "https://github.com/EngDawood/drawio-skill",
+  "repository": "https://github.com/EngDawood/drawio-skill",
+  "license": "MIT",
+  "keywords": ["drawio", "diagrams", "flowchart", "architecture", "mermaid"]
+}
